@@ -34,6 +34,16 @@ class DatabaseController
         return true;
     }
 
+    public bool DeleteRowInTable(int id)
+    {
+        string query =
+            @$"DELETE FROM coding_periods WHERE Id = {id}";
+
+        MakeQuery(query);
+
+        return true;
+    }
+
     private void ConfirmTableExists() 
     {
         string query = 
