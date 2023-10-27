@@ -11,6 +11,17 @@ class DatabaseController
         ConfirmTableExists();       
     }
 
+    public bool AddDataToTable(string startTime, string endTime, float duration)
+    {
+        string query = 
+            @$"INSERT INTO coding_periods (Start_Time, End_Time, Duration)
+            VALUES ('{startTime}', '{endTime}', {duration})";
+
+        MakeQuery(query);
+
+        return true;
+    }
+
     private void ConfirmTableExists() 
     {
         string query = 
@@ -18,7 +29,7 @@ class DatabaseController
                 Id INTEGER PRIMARY KEY AUTOINCREMENT,
                 Start_Time TEXT NOT NULL,
                 End_Time TEXT NOT NULL,
-                Duration FLOAT
+                Duration FLOAT NOT NULL 
             )";
 
         MakeQuery(query);
