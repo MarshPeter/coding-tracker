@@ -22,6 +22,18 @@ class DatabaseController
         return true;
     }
 
+    public bool UpdateRowInTable(int id, string startTime, string endTime, float duration)
+    {
+        string query =
+            @$"UPDATE coding_periods
+                SET Start_time = '{startTime}', End_Time = '{endTime}', Duration = {duration}
+                WHERE Id = {id}";
+
+        MakeQuery(query);
+
+        return true;
+    }
+
     private void ConfirmTableExists() 
     {
         string query = 
