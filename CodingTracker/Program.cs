@@ -5,4 +5,7 @@ string connectionString = ConfigurationManager.AppSettings.Get("connectionString
 string path = ConfigurationManager.AppSettings.Get("path")!;
 
 DatabaseController db = new DatabaseController(path, connectionString);
-db.DeleteRowInTable(1);
+UserInput userConsole = new UserInput(db);
+userConsole.DisplayOptions();
+
+

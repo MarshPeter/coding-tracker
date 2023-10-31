@@ -1,10 +1,9 @@
+namespace CodingTracker;
 using Microsoft.Data.Sqlite;
 
-namespace CodingTracker;
-
-class DatabaseController
+public class DatabaseController
 {
-    internal DatabaseController(string path, string connectionString)
+    public DatabaseController(string path, string connectionString)
     {
         ConnectionString = connectionString;
         Path = path;
