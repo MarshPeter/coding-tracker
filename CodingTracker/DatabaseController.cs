@@ -1,5 +1,10 @@
 namespace CodingTracker;
+
 using Microsoft.Data.Sqlite;
+
+using System.Collections.Generic;
+using System.Data;
+using System.Data.Common;
 
 public class DatabaseController
 {
@@ -41,6 +46,36 @@ public class DatabaseController
         MakeQuery(query);
 
         return true;
+    }
+
+    public List<CodingSession> RetrieveCodingSessions()
+    {
+        List<CodingSession> codingSessions = new();
+
+        using (var connection = new SqliteConnection(ConnectionString))
+        {
+            connection.Open();
+            SqliteCommand tableCmd = connection.CreateCommand();
+            tableCmd.CommandText =
+                $"SELECT * FROM coding_periods";
+
+            SqliteDataReader reader = tableCmd.ExecuteReader();
+
+            while (reader.Read())
+            {
+                codingSessions.Add(
+                    new CodingSession 
+                    {
+                        Id = reader.GetInt32(0),
+                        StartTime = reader.GetString(1),
+                        EndTime = reader.GetString(2),
+                        Duration = reader.GetFloat(3)
+                    }
+                );
+            }
+        }
+
+        return codingSessions;
     }
 
     private void ConfirmTableExists() 

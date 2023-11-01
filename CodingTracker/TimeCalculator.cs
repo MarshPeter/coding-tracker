@@ -1,8 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Reflection;
-
 namespace CodingTracker;
 
 // all class functionality assumes "dd/mm/yy hh:mm:ss" formatted date

@@ -1,12 +1,11 @@
-using System.Collections;
-
 namespace CodingTracker;
 
 public class UserInput 
 {
-    public UserInput(DatabaseController db)
+    public UserInput(DatabaseController db, TableDisplay tableDisplayer)
     {
         DbAccess = db;
+        TableDisplayer = tableDisplayer;
     }
 
     public bool DisplayOptions()
@@ -29,6 +28,9 @@ public class UserInput
             case "0":
                 ExitMessages();
                 return false;
+            case "1":
+                DisplayLogs();
+                break;
             case "2":
                 EnterNewPeriod();
                 break;
@@ -88,6 +90,7 @@ public class UserInput
             switch (userIsOkWithSubmission!.Trim().ToLower())
             {
                 case "y":
+                    DbAccess.AddDataToTable(startDateTime!, endDateTime!, timeCalc.Duration);
                     Console.WriteLine("Your coding period has been added");
                     validResponse = true;
                     break;
@@ -102,6 +105,19 @@ public class UserInput
             }
         }
     }
+
+    private void DisplayLogs()
+    {
+        Console.Clear();
+        Console.WriteLine("Here are your logs");
+        List<CodingSession> sessions = DbAccess.RetrieveCodingSessions();
+        TableDisplayer.DisplayCodingSessions(sessions);
+        Console.WriteLine();
+        Console.WriteLine("Press any button to continue");
+        Console.ReadKey();
+    }
+
+    private TableDisplay TableDisplayer {get; set;}
 
     private DatabaseController DbAccess {get; set;}
 }

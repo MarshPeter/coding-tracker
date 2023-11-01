@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "5WhKzRdI2erOFODJWM9qUsOixC63lGrRUKbUzVpOpFsXEjSCuwjP0eiSZUgoYpBO+DuD9nPxQd71jeEueyg/HQ==",
+  "dgSpecHash": "kC/ZBWL0cRMPOJIMwPNQI1B/sp0m0B+oG5jePHDn3tSYZOo5qWZm8zw2I3T+k7WUg2V7HmBSS22umkdEjINaPw==",
   "success": true,
   "projectFilePath": "C:\\Users\\peter\\Code\\workspace\\github.com\\MarshPeter\\coding-tracker\\CodingTracker\\CodingTracker.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\peter\\.nuget\\packages\\consoletableext\\3.2.0\\consoletableext.3.2.0.nupkg.sha512",
     "C:\\Users\\peter\\.nuget\\packages\\microsoft.data.sqlite\\7.0.13\\microsoft.data.sqlite.7.0.13.nupkg.sha512",
     "C:\\Users\\peter\\.nuget\\packages\\microsoft.data.sqlite.core\\7.0.13\\microsoft.data.sqlite.core.7.0.13.nupkg.sha512",
     "C:\\Users\\peter\\.nuget\\packages\\microsoft.win32.systemevents\\7.0.0\\microsoft.win32.systemevents.7.0.0.nupkg.sha512",
