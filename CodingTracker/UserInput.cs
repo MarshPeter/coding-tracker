@@ -1,3 +1,7 @@
+using System.Collections;
+using System.Data;
+using System.Runtime.CompilerServices;
+
 namespace CodingTracker;
 
 public class UserInput 
@@ -34,13 +38,15 @@ public class UserInput
             case "2":
                 EnterNewPeriod();
                 break;
+            case "3":
+                UpdateCodingPeriod();
+                break;
             default:
                 Console.WriteLine("that is not a correct command");
                 break;
 
         } 
         return true;
-        
     }
 
     private void ExitMessages() 
@@ -117,7 +123,117 @@ public class UserInput
         Console.ReadKey();
     }
 
-    private TableDisplay TableDisplayer {get; set;}
+    private void UpdateCodingPeriod()
+    {
+        int n = -1;
+        bool validNumber = false;
 
+        while (!validNumber)
+        {
+            Console.Clear();
+            Console.WriteLine("Select a log to edit by entering a number for the ID you would like to edit");
+            string res = Console.ReadLine()!;
+
+            validNumber = Int32.TryParse(res, out n);
+            if (!validNumber)
+            {
+                Console.WriteLine("That was an invalid input, you must input an integer");
+                Console.WriteLine("Press any key to try again");
+                Console.ReadLine();
+            }
+        }
+
+        CodingSession session = DbAccess.RetrieveSingleSession(n);
+        if (session.Id == -1)
+        {
+            Console.WriteLine("That is not a identifiable session id");
+            Console.WriteLine("Press any key to return to the menu");
+            Console.ReadLine();
+            return;
+        }
+
+        bool validResponse = false;
+        while (!validResponse)
+        {
+            Console.Clear();
+            Console.WriteLine("The current log is as follows");
+            TableDisplayer.DisplayCodingSessions(new List<CodingSession>(){session});
+            Console.WriteLine("Enter what you would like to change");
+            Console.WriteLine("----------------------------------------------------------------------------");
+            Console.WriteLine("1 - change the start datetime");
+            Console.WriteLine("2 - change the end datetime");
+            Console.WriteLine("3 - Update both the start and end datetime");
+            Console.WriteLine("4 - cancel change");
+            Console.WriteLine("----------------------------------------------------------------------------");
+            Console.Write("Enter your choice > ");
+            string? choice = Console.ReadLine();
+
+            switch (choice)
+            {
+                case "1":
+                    session.StartTime = UpdateTime("start", session.StartTime!);
+                    validResponse = true;
+                    break;
+                case "2":
+                    session.EndTime = UpdateTime("end", session.EndTime!);
+                    validResponse = true;
+                    break;
+                case "3":
+                    session.StartTime = UpdateTime("start", session.StartTime!);
+                    session.EndTime = UpdateTime("end", session.EndTime!);
+                    validResponse = true; 
+                    break;
+                case "4":
+                    return;
+                default:
+                    Console.WriteLine("that was not a valid response, try again");
+                    break;
+            } 
+        }
+
+        TimeCalculator calc = new TimeCalculator(session.StartTime!, session.EndTime!);
+        session.Duration = calc.Duration;
+        validResponse = false;
+
+        while(!validResponse)
+        {
+            Console.Clear();
+            Console.WriteLine("Your new session would now be:");
+            TableDisplayer.DisplayCodingSessions(new List<CodingSession>(){session});
+            Console.WriteLine("Are you sure this is what you want?");
+            Console.WriteLine("----------------------------------------------------------------------------");
+            Console.WriteLine("1 - confirm change");
+            Console.WriteLine("2 - abort change");
+            Console.WriteLine("----------------------------------------------------------------------------");
+            Console.Write("Enter your choice > ");
+            string choice = Console.ReadLine()!;
+
+            switch (choice)
+            {
+                case "1":
+                    DbAccess.UpdateRowInTable(session.Id, session.StartTime!, session.EndTime!, (float) session.Duration);
+                    validResponse = true;
+                    break;
+                case "2":
+                    return;
+                default:
+                    Console.WriteLine("That command was not recognized, press any key to try again!");
+                    Console.ReadKey();
+                    break;
+            }
+        }
+
+
+    }
+
+    private string UpdateTime(string time, string datetime)
+    {
+        Console.Clear();
+        Console.WriteLine($"You are going to update the {time} time.");
+        Console.WriteLine($"The current {time} time is: {datetime}");
+        Console.WriteLine($"Enter your new {time} time");
+        return Console.ReadLine()!;
+    }
+    private TableDisplay TableDisplayer {get; set;}
     private DatabaseController DbAccess {get; set;}
 }

@@ -78,6 +78,33 @@ public class DatabaseController
         return codingSessions;
     }
 
+    public CodingSession RetrieveSingleSession(int id)
+    {
+        CodingSession session = new();
+        session.Id = -1;
+
+        using (SqliteConnection connection = new SqliteConnection(this.ConnectionString))
+        {
+            connection.Open();
+            SqliteCommand tableCmd = connection.CreateCommand();
+            tableCmd.CommandText =
+                $"SELECT * FROM coding_periods WHERE Id = {id}";
+            
+            SqliteDataReader reader = tableCmd.ExecuteReader();
+
+            while (reader.Read())
+            {
+                session.Id = reader.GetInt32(0);
+                session.StartTime = reader.GetString(1);
+                session.EndTime = reader.GetString(2);
+                session.Duration = reader.GetFloat(3);
+            }
+        
+        }
+
+        return session;
+    }
+
     private void ConfirmTableExists() 
     {
         string query = 

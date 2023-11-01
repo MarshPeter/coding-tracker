@@ -10,5 +10,4 @@ public class TableDisplay
     {
         ConsoleTableBuilder.From(sessions).ExportAndWriteLine();   
     }
-
 }
