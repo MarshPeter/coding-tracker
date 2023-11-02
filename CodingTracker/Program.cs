@@ -9,6 +9,10 @@ DatabaseController db = new DatabaseController(path, connectionString);
 TableDisplay tableDisplayer = new();
 UserInput userConsole = new UserInput(db, tableDisplayer);
 
-userConsole.DisplayOptions();
+bool programContinues = true;
+while (programContinues)
+{
+    programContinues = userConsole.DisplayOptions();
+}
 
 

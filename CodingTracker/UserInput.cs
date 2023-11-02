@@ -66,17 +66,46 @@ public class UserInput
         
         while (startDateTime == null && endDateTime == null)
         {
-            Console.Clear();
-            Console.WriteLine("You will be adding a new period to the database.");
-            Console.WriteLine("Enter a date and time in the following format for when you started: ");
-            Console.WriteLine("FORMAT: dd/mm/yy hh:mm");
-            startDateTime = Console.ReadLine();
-            Console.Clear();
-            Console.WriteLine($"You entered {startDateTime} as your start time");
-            Console.WriteLine("----------------------------------------------------------------------------");
-            Console.WriteLine("Enter a date and time in the following format for when you ended: ");
-            Console.WriteLine("FORMAT: dd/mm/yy hh:mm");
-            endDateTime = Console.ReadLine();
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine("You will be adding a new period to the database.");
+                Console.WriteLine("Enter a date and time in the following format for when you started: ");
+                Console.WriteLine("FORMAT: dd/mm/yy hh:mm");
+                startDateTime = Console.ReadLine()!;
+
+                if (!Validator.validateDateTime(startDateTime))
+                {
+                    Console.WriteLine("That is not a valid format for the datetime");
+                    Console.WriteLine("Enter any key to try again");
+                    Console.ReadKey();
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine($"You entered {startDateTime} as your start time");
+                Console.WriteLine("----------------------------------------------------------------------------");
+                Console.WriteLine("Enter a date and time in the following format for when you ended: ");
+                Console.WriteLine("FORMAT: dd/mm/yy hh:mm");
+                endDateTime = Console.ReadLine()!;
+
+                if (!Validator.validateDateTime(endDateTime))
+                {
+                    Console.WriteLine("That is not a valid format for the datetime");
+                    Console.WriteLine("Enter any key to try again");
+                    Console.ReadKey();
+                }
+                else
+                {
+                    break;
+                }
+            }
         }
 
         bool validResponse = false;
@@ -229,11 +258,27 @@ public class UserInput
 
     private string UpdateTime(string time, string datetime)
     {
-        Console.Clear();
-        Console.WriteLine($"You are going to update the {time} time.");
-        Console.WriteLine($"The current {time} time is: {datetime}");
-        Console.WriteLine($"Enter your new {time} time");
-        return Console.ReadLine()!;
+        string newDateTime;
+        while (true)
+        {
+            Console.Clear();
+            Console.WriteLine($"You are going to update the {time} time.");
+            Console.WriteLine($"The current {time} time is: {datetime}");
+            Console.WriteLine($"Enter your new {time} time in the format: dd/mm/yy hh:mm");
+            newDateTime = Console.ReadLine()!;
+
+            if (!Validator.validateDateTime(newDateTime))
+            {
+                Console.WriteLine("That is in an incorrect format, please try again");
+                Console.ReadKey();
+            }
+            else
+            {
+                break;
+            }
+
+        }
+        return newDateTime;
     }
 
     private void DeleteCodingPeriod()
