@@ -41,6 +41,9 @@ public class UserInput
             case "3":
                 UpdateCodingPeriod();
                 break;
+            case "4":
+                DeleteCodingPeriod();
+                break;
             default:
                 Console.WriteLine("that is not a correct command");
                 break;
@@ -222,8 +225,6 @@ public class UserInput
                     break;
             }
         }
-
-
     }
 
     private string UpdateTime(string time, string datetime)
@@ -234,6 +235,78 @@ public class UserInput
         Console.WriteLine($"Enter your new {time} time");
         return Console.ReadLine()!;
     }
+
+    private void DeleteCodingPeriod()
+    {
+        int n = -1;
+        bool validNumber = false;
+
+        while (!validNumber)
+        {
+            Console.Clear();
+            Console.WriteLine("Select a log to delete by entering a number for the ID you would like to remove");
+            Console.WriteLine("Alternatively, you can type in 'n' to return to the main menu");
+            string res = Console.ReadLine()!;
+
+            if (res.Trim().ToLower() == "n")
+            {
+                return;
+            }
+
+            validNumber = Int32.TryParse(res, out n);
+            if (!validNumber)
+            {
+                Console.WriteLine("That was an invalid input, you must input an integer");
+                Console.WriteLine("Press any key to try again");
+                Console.ReadLine();
+            }
+        }
+
+        CodingSession session = DbAccess.RetrieveSingleSession(n);
+        if (session.Id == -1)
+        {
+            Console.WriteLine("That is not a identifiable session id");
+            Console.WriteLine("Press any key to return to the menu");
+            Console.ReadLine();
+            return;
+        }
+
+        bool validResponse = false;
+
+        while (!validResponse)
+        {
+            Console.Clear();
+            Console.WriteLine("This is your coding session you are about to delete");
+            TableDisplayer.DisplayCodingSessions(new List<CodingSession>(){session});
+            Console.WriteLine("Are you sure this is what you want?");
+            Console.WriteLine("----------------------------------------------------------------------------");
+            Console.WriteLine("1 - confirm change");
+            Console.WriteLine("2 - abort change");
+            Console.WriteLine("----------------------------------------------------------------------------");
+            Console.Write("Enter your choice > ");
+            string response = Console.ReadLine()!;
+
+            switch (response)
+            {
+                case "1":
+                    DbAccess.DeleteRowInTable(n);
+                    validResponse = true;
+                    break;
+                case "2":
+                    return;
+                default:
+                    Console.WriteLine("That is not a valid response.");
+                    Console.WriteLine("Press any key to try again");
+                    Console.ReadKey();
+                    break;
+            }
+        }
+
+        Console.WriteLine("The session has been deleted");
+        Console.WriteLine("Press any key to continue");
+        Console.ReadLine();
+    }
+
     private TableDisplay TableDisplayer {get; set;}
     private DatabaseController DbAccess {get; set;}
 }
